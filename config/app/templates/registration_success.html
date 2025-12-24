@@ -1,0 +1,10 @@
+{% extends "home.html" %}
+{% block title %}Sing up success{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="alert alert-success" role="alert">
+        Sing up success. Please login.
+    </div>
+    <a href="{% url 'login' %}" class="btn btn-primary">Log in</a>
+
+{% endblock %}

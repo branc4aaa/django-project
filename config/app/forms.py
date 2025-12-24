@@ -1,6 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from .models import Task
+
+
 class Register(UserCreationForm):
     username = forms.CharField(max_length=20)
     password = forms.CharField(widget=forms.PasswordInput)
@@ -8,3 +11,12 @@ class Register(UserCreationForm):
     class Meta:
         model = User
         fields = ["username", "password", "password2"]  
+
+class NewTask(forms.Form):
+    title = forms.CharField(max_length=200)
+    description = forms.Textarea
+    completed = forms.BooleanField
+    class Meta:
+        model = Task
+        fields = ["title","description","completed"]
+
