@@ -6,6 +6,7 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('login/', views.login, name='login'),
     path('tasks/', views.tasks, name='tasks'),
-    path('tasks/new', views.newTask, name='nt')
+    path('tasks/new', views.newTask, name='nt'),
+    path('', views.message, name='registration_success'),
     
 ]

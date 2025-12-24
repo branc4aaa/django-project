@@ -2,5 +2,14 @@
 {% block title %}Tasks{% endblock title %}
 {% block content %}
     {% for task in tasks %}
+    <div class="card">
+        <li>{{task.title}}</li>
+        <li>{{task.description}}</li>
+        <li>{{task.completed}}</li>
+    </div>
     {% endfor %}
+
+    {%if request.user.is_autenticated%}
+    <button type="submit" class="btn btn-primary"><a href= {% url 'nt'%}>New Task</a></button>
+    {% endif %}
 {% endblock content %}

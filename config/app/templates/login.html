@@ -4,7 +4,7 @@
     <div>
         <form method='post'>{% csrf_token %}
             {{form.as_p}}
-            <button action="submit" value="Log in">
+            <button type="submit" class="btn btn-primary">Sign in</button>
         </form>
     </div>
 {%endblock%}

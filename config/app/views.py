@@ -2,7 +2,7 @@ from django.shortcuts import render ,redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
-from .forms import Register ,NewTask
+from .forms import Register, NewTask
 from .models import Task
 from datetime import datetime
 
@@ -15,23 +15,23 @@ def register(request):
         form = Register(request.POST)
         if form.is_valid():
             form.save()
-            return render(request, 'registration_success.html')
+            return redirect('registration_success')
     else:
         form = Register()
     return render(request, 'register.html', {'form': form})
 
 def login(request):
-    if request.method == "POST" :
+    if request.method == "post" :
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
-            un = form.cleaned_data("username")
-            pw = form.cleaned_data("password")
+            un = form.cleaned_data.get("username")
+            pw = form.cleaned_data.get("password")
             user = authenticate(username=un, password=pw)
             if user is not None:
                 login(request, user)
-                return render(request, 'home.html')
+                return render(request, 'message.html', {'message':'logged'})
         else:
-            return render(request, {'message':'something bad'})
+            return render(request, 'message.html', {'message':'something bad'})
 
     else:
         form = AuthenticationForm()
@@ -53,9 +53,11 @@ def newTask(request):
             created = datetime.now()
             task = Task(title=title, description=description, completed=status, created=created)
             task.save()
-            return redirect(tasks(request=request))
+            return redirect("tasks")
         else:
-            return render(request, 'tasks.html' )
+            return render(request, 'nt.html', {'form':form} )
 
 
-
+def message(request):
+    mj = 'any'
+    return render(request, 'message.html', {'message':mj})

@@ -6,11 +6,11 @@ from .models import Task
 
 class Register(UserCreationForm):
     username = forms.CharField(max_length=20)
-    password = forms.CharField(widget=forms.PasswordInput)
+    password1 = forms.CharField(widget=forms.PasswordInput)
     password2 = forms.CharField(label='Confirmar contraseña', widget=forms.PasswordInput)
     class Meta:
         model = User
-        fields = ["username", "password", "password2"]  
+        fields = ["username", "password1", "password2"]  
 
 class NewTask(forms.Form):
     title = forms.CharField(max_length=200)
