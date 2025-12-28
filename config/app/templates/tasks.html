@@ -6,10 +6,14 @@
         <li>{{task.title}}</li>
         <li>{{task.description}}</li>
         <li>{{task.completed}}</li>
+        {%if request.user.is_authenticated%}
+        <a href= {% url 'update_task' task.id %} class="btn btn-secondary">Update Task</a>
+        <a href= {% url 'delete_task' task.id %} class="btn btn-danger">Delete Task</a>
+        {% endif %}
     </div>
     {% endfor %}
 
-    {%if request.user.is_autenticated%}
-    <button type="submit" class="btn btn-primary"><a href= {% url 'nt'%}>New Task</a></button>
+    {%if request.user.is_authenticated%}
+    <a href= {% url 'nt'%} class="btn btn-primary">New Task</a>
     {% endif %}
 {% endblock content %}

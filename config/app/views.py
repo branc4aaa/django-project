@@ -1,11 +1,11 @@
-from django.shortcuts import render ,redirect
+from django.shortcuts import render ,redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
-from .forms import Register, NewTask
+from .forms import Register, NewTask, UpdateTask
 from .models import Task
 from datetime import datetime
-
+from django.contrib.auth import logout
 
 def home(request):
     return render(request, 'home.html')
@@ -15,13 +15,13 @@ def register(request):
         form = Register(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('registration_success')
+            return render(request, 'registration_success.html')
     else:
         form = Register()
     return render(request, 'register.html', {'form': form})
 
-def login(request):
-    if request.method == "post" :
+def login_view(request):
+    if request.method == "POST" :
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             un = form.cleaned_data.get("username")
@@ -29,7 +29,7 @@ def login(request):
             user = authenticate(username=un, password=pw)
             if user is not None:
                 login(request, user)
-                return render(request, 'message.html', {'message':'logged'})
+                return redirect('tasks')
         else:
             return render(request, 'message.html', {'message':'something bad'})
 
@@ -56,8 +56,45 @@ def newTask(request):
             return redirect("tasks")
         else:
             return render(request, 'nt.html', {'form':form} )
+    else:
+        form = NewTask()
+        return render(request, 'nt.html', {'form':form} )
 
 
 def message(request):
     mj = 'any'
     return render(request, 'message.html', {'message':mj})
+
+def logout_view(request):
+    logout(request)
+    return redirect('home')
+
+
+@login_required
+def updateTask_view(request, tid):
+    task = get_object_or_404(Task, id=tid)
+    if request.method == "POST":
+        form = UpdateTask(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            task.title = data.get("title")
+            task.description = data.get("description")
+            task.completed = data.get("completed")
+            task.save()
+            return redirect("tasks")
+        else:
+            return render(request, 'update_task.html', {'form':form, 'task':task, 'message':"error"} )
+    else:
+        form = UpdateTask(initial={
+            'title': task.title,
+            'description': task.description,
+            'completed': task.completed
+        })
+        return render(request, 'update_task.html', {'form':form, 'task':task} )
+    
+
+@login_required
+def deleteTask_view(request, tid):
+    task = get_object_or_404(Task, id=tid)
+    task.delete()
+    return redirect("tasks")
