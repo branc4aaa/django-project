@@ -3,6 +3,6 @@
 {% block content %} 
     <form method='post'>{% csrf_token %}
         {{form.as_p}}
-        <button type="submit" value="Send">
+        <button type="submit" class="btn btn-primary">Send</button>
     </form>
 {% endblock content %}

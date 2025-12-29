@@ -14,9 +14,17 @@ class Register(UserCreationForm):
 
 class NewTask(forms.Form):
     title = forms.CharField(max_length=200)
-    description = forms.Textarea
-    completed = forms.BooleanField
+    description = forms.CharField(widget=forms.Textarea)
+    completed = forms.BooleanField(required=False)
+    created = forms.DateTimeField(widget=forms.HiddenInput(), required=False)
     class Meta:
         model = Task
         fields = ["title","description","completed"]
 
+class UpdateTask(forms.Form):
+    title = forms.CharField(max_length=200)
+    description = forms.CharField(widget=forms.Textarea)
+    completed = forms.BooleanField(required=False)
+    class Meta:
+        model = Task
+        fields = ["title","description","completed"]
